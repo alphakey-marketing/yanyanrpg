@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { GAME_WIDTH, GAME_HEIGHT, SCENE_VILLAGE, SCENE_UI } from '../core/constants'
+import { GAME_WIDTH, GAME_HEIGHT, SCENE_VILLAGE } from '../core/constants'
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -112,7 +112,9 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
+    // FIX Bug #4: only start VillageScene here.
+    // UIScene is launched by BaseScene.create() via scene.launch() already.
+    // Starting it here too caused all HUD event listeners to register twice.
     this.scene.start(SCENE_VILLAGE)
-    this.scene.start(SCENE_UI)
   }
 }
