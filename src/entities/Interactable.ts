@@ -46,7 +46,7 @@ export default class Interactable {
 
   private getLabel(type: MapNode['type']): string {
     switch (type) {
-      case 'chest': return '箱'
+      case 'chest': return '筱'
       case 'mechanism': return '機'
       case 'entrance': return '→'
       case 'platform': return '台'
@@ -87,7 +87,10 @@ export default class Interactable {
     }
 
     if (this.node.type === 'entrance' && this.node.linkedSceneId) {
-      emit(Events.SCENE_CHANGED, this.node.linkedSceneId)
+      // FIX Bug #1: emit SCENE_NAVIGATE (navigation request) not SCENE_CHANGED.
+      // SCENE_NAVIGATE is handled only by BaseScene's navigation listener.
+      // SCENE_CHANGED / SCENE_READY is for HUD label updates only.
+      emit(Events.SCENE_NAVIGATE, this.node.linkedSceneId)
       return
     }
 
