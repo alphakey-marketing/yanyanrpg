@@ -73,6 +73,6 @@ export default class BambooFieldScene extends BaseScene {
     })
   }
 
-  protected getPlayerSpawnX(): number { return 80 }
+  protected getPlayerSpawnX(): number { return 160 }
   protected getPlayerSpawnY(): number { return 220 }
 }

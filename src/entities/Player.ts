@@ -36,6 +36,10 @@ export default class Player {
   private keys: Record<string, Phaser.Input.Keyboard.Key> = {}
   // FIX Q1: guard against entrance firing scene:navigate every frame.
   private transitioning = false
+  // Grace period after scene load — prevents spawning too close to an entrance
+  // from immediately triggering a back-transition on the first update frame.
+  private spawnGraceElapsed = 0
+  private static readonly SPAWN_GRACE_MS = 500
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     this.scene = scene
@@ -155,6 +159,7 @@ export default class Player {
   }
 
   update(delta: number): void {
+    this.spawnGraceElapsed += delta
     this.handleKeyboardInput()
     if (!isDodging()) {
       this.joystick.applyToSprite(this.sprite)
@@ -203,6 +208,10 @@ export default class Player {
     // FIX Q1: if a transition is already in flight, skip all further checks
     // so entrance nodes do not spam scene:navigate every frame.
     if (this.transitioning) return
+
+    // Grace period after spawn — prevents an entrance that is close to the
+    // spawn point from immediately firing a back-transition on the first frame.
+    if (this.spawnGraceElapsed < Player.SPAWN_GRACE_MS) return
 
     interactables.forEach(item => {
       if (this.transitioning) return
