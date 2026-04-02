@@ -234,7 +234,7 @@ export default abstract class BaseScene extends Phaser.Scene {
     })
 
     // Trigger scene transitions and interactable nodes
-    this.player.checkInteractableInteraction(this.interactables)
+    this.player.checkInteractableInteraction(this.interactables, GAME_WIDTH)
 
     this.enemies = this.enemies.filter(e => e.isAlive())
   }

@@ -57,6 +57,24 @@
         pointer-events: none;
         z-index: 10;
       }
+
+      /* ── Forced landscape on mobile ─────────────────────────────────────── */
+      /* When the device is held in portrait mode we rotate the entire shell   */
+      /* 90 degrees so the game always renders landscape.  We swap width/height */
+      /* so the rotated content still fills the screen correctly.              */
+      @media screen and (orientation: portrait) and (max-width: 1024px) {
+        #app-shell {
+          position: fixed;
+          top: 0;
+          left: 0;
+          /* After rotation the logical width becomes the physical height */
+          width: 100vh;
+          height: 100vw;
+          transform-origin: top left;
+          transform: rotate(90deg) translateY(-100%);
+          overflow: hidden;
+        }
+      }
     </style>
   </head>
   <body>

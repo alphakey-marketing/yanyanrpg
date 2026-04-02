@@ -19,15 +19,27 @@ export default class Interactable {
     this.sprite.setDepth(8)
 
     this.label = scene.add
-      .text(node.x, node.y - 20, this.getLabel(node.type), {
-        fontSize: '10px',
-        color: '#f1c40f',
+      .text(node.x, node.y - 24, this.getLabel(node.type), {
+        fontSize: node.type === 'entrance' ? '14px' : '10px',
+        color: node.type === 'entrance' ? '#ffe066' : '#f1c40f',
         fontFamily: 'serif',
         stroke: '#000',
-        strokeThickness: 2,
+        strokeThickness: 3,
       })
       .setOrigin(0.5)
       .setDepth(9)
+
+    // Pulse entrance labels so they're clearly visible
+    if (node.type === 'entrance') {
+      scene.tweens.add({
+        targets: this.label,
+        alpha: { from: 1, to: 0.4 },
+        duration: 700,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      })
+    }
 
     if (node.triggerFlag && hasFlag(node.triggerFlag)) {
       this.triggered = true
@@ -46,9 +58,9 @@ export default class Interactable {
 
   private getLabel(type: MapNode['type']): string {
     switch (type) {
-      case 'chest': return '筱'
+      case 'chest': return '箱'
       case 'mechanism': return '機'
-      case 'entrance': return '→'
+      case 'entrance': return '【進入】'
       case 'platform': return '台'
       case 'secret': return '？'
       case 'encounter': return '！'

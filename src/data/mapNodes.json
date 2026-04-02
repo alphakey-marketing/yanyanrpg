@@ -3,8 +3,8 @@
     "id": "node_village_exit_bamboo",
     "sceneId": "VillageScene",
     "type": "entrance",
-    "x": 760,
-    "y": 300,
+    "x": 770,
+    "y": 225,
     "linkedSceneId": "BambooFieldScene"
   },
   {
@@ -53,8 +53,8 @@
     "id": "node_cave_entrance",
     "sceneId": "BambooFieldScene",
     "type": "entrance",
-    "x": 750,
-    "y": 400,
+    "x": 770,
+    "y": 225,
     "requiresFlag": "bandit_elite_dead",
     "linkedSceneId": "RuinCaveScene",
     "triggerFlag": "cave_entered"
@@ -90,16 +90,16 @@
     "id": "node_cave_exit",
     "sceneId": "RuinCaveScene",
     "type": "entrance",
-    "x": 50,
-    "y": 300,
-    "linkedSceneId": "VillageScene"
+    "x": 30,
+    "y": 225,
+    "linkedSceneId": "BambooFieldScene"
   },
   {
     "id": "node_bamboo_exit_village",
     "sceneId": "BambooFieldScene",
     "type": "entrance",
     "x": 30,
-    "y": 220,
+    "y": 225,
     "linkedSceneId": "VillageScene"
   }
 ]

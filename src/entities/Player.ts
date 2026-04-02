@@ -199,7 +199,7 @@ export default class Player {
     if (Phaser.Input.Keyboard.JustDown(keys['SPACE']!)) switchWeapon()
   }
 
-  checkInteractableInteraction(interactables: Interactable[]): void {
+  checkInteractableInteraction(interactables: Interactable[], sceneWidth: number): void {
     // FIX Q1: if a transition is already in flight, skip all further checks
     // so entrance nodes do not spam scene:navigate every frame.
     if (this.transitioning) return
@@ -212,7 +212,18 @@ export default class Player {
         item.sprite.x,
         item.sprite.y
       )
-      if (dist < 60 && item.canInteract()) {
+      // Increased radius to 80px; for right-side entrances also auto-trigger
+      // when the player reaches the right screen edge (within 30px).
+      const isRightEdge =
+        item.node.type === 'entrance' &&
+        item.sprite.x > sceneWidth - 80 &&
+        this.sprite.x > sceneWidth - 30
+      const isLeftEdge =
+        item.node.type === 'entrance' &&
+        item.sprite.x < 80 &&
+        this.sprite.x < 30
+
+      if ((dist < 80 || isRightEdge || isLeftEdge) && item.canInteract()) {
         if (item.node.type === 'entrance') {
           this.transitioning = true
         }
