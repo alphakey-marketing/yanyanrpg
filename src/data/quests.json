@@ -1,0 +1,216 @@
+[
+  {
+    "id": "quest_main_01",
+    "type": "main",
+    "title": "失落的祠印",
+    "description": "山賊奪走了清河村的祠印。尋回它，方能平息村中動亂。",
+    "giverNpcId": "npc_village_chief",
+    "stages": [
+      {
+        "id": "stage_01",
+        "objective": "與村長交談",
+        "completion": {
+          "type": "dialogue",
+          "targetId": "npc_village_chief"
+        }
+      },
+      {
+        "id": "stage_02",
+        "objective": "前往竹林道搜查",
+        "completion": {
+          "type": "enterScene",
+          "targetId": "BambooFieldScene"
+        }
+      },
+      {
+        "id": "stage_03",
+        "objective": "擊敗竹林山賊頭目",
+        "completion": {
+          "type": "kill",
+          "targetId": "enemy_bandit_elite",
+          "count": 1
+        }
+      },
+      {
+        "id": "stage_04",
+        "objective": "找到破廟入口",
+        "completion": {
+          "type": "interact",
+          "targetId": "node_cave_entrance"
+        }
+      },
+      {
+        "id": "stage_05",
+        "objective": "擊敗地宮守護者",
+        "completion": {
+          "type": "kill",
+          "targetId": "enemy_boss_guardian",
+          "count": 1
+        }
+      }
+    ],
+    "rewards": [
+      { "type": "item", "id": "item_shrine_seal", "amount": 1 },
+      { "type": "weapon", "id": "fan_youfeng" },
+      { "type": "unlockMysticArt", "id": "art_qinxing" }
+    ],
+    "flagsOnComplete": ["main_quest_complete", "village_saved"],
+    "prerequisiteFlags": []
+  },
+  {
+    "id": "quest_side_01",
+    "type": "side",
+    "title": "郎中求藥",
+    "description": "郎中急需竹林中的山草藥，為傷者治病。",
+    "giverNpcId": "npc_healer",
+    "stages": [
+      {
+        "id": "stage_01",
+        "objective": "收集山草藥 3 株",
+        "completion": {
+          "type": "collect",
+          "targetId": "item_herb",
+          "count": 3
+        }
+      },
+      {
+        "id": "stage_02",
+        "objective": "將草藥交給郎中",
+        "completion": {
+          "type": "dialogue",
+          "targetId": "npc_healer"
+        }
+      }
+    ],
+    "rewards": [
+      { "type": "item", "id": "item_healing_potion", "amount": 2 },
+      { "type": "currency", "id": "coin", "amount": 50 }
+    ],
+    "flagsOnComplete": ["side_healer_done"],
+    "prerequisiteFlags": []
+  },
+  {
+    "id": "quest_side_02",
+    "type": "side",
+    "title": "酒館傳聞",
+    "description": "說書人聽聞地宮中有一件古兵器，值得一探。",
+    "giverNpcId": "npc_storyteller",
+    "stages": [
+      {
+        "id": "stage_01",
+        "objective": "聽取說書人的傳聞",
+        "completion": {
+          "type": "dialogue",
+          "targetId": "npc_storyteller"
+        }
+      },
+      {
+        "id": "stage_02",
+        "objective": "在地宮中找到古物",
+        "completion": {
+          "type": "interact",
+          "targetId": "node_ancient_relic"
+        }
+      }
+    ],
+    "rewards": [
+      { "type": "item", "id": "item_ancient_relic", "amount": 1 },
+      { "type": "currency", "id": "coin", "amount": 30 }
+    ],
+    "flagsOnComplete": ["side_rumor_done"],
+    "prerequisiteFlags": []
+  },
+  {
+    "id": "quest_side_03",
+    "type": "side",
+    "title": "夜間怪聲",
+    "description": "村民夜間聽到竹林傳來異響，懷疑有邪物出沒。",
+    "giverNpcId": "npc_villager",
+    "stages": [
+      {
+        "id": "stage_01",
+        "objective": "調查竹林怪聲來源",
+        "completion": {
+          "type": "interact",
+          "targetId": "node_strange_sound"
+        }
+      },
+      {
+        "id": "stage_02",
+        "objective": "擊敗夜行魅影",
+        "completion": {
+          "type": "kill",
+          "targetId": "enemy_shadow",
+          "count": 1
+        }
+      }
+    ],
+    "rewards": [
+      { "type": "item", "id": "item_spirit_charm", "amount": 1 },
+      { "type": "currency", "id": "coin", "amount": 40 }
+    ],
+    "flagsOnComplete": ["side_night_done"],
+    "prerequisiteFlags": []
+  },
+  {
+    "id": "quest_encounter_01",
+    "type": "encounter",
+    "title": "偷學招式",
+    "description": "竹林中一名蒙面高手正在練功，可趁機偷師。",
+    "stages": [
+      {
+        "id": "stage_01",
+        "objective": "觀察蒙面高手的招式",
+        "completion": {
+          "type": "interact",
+          "targetId": "node_master_training"
+        }
+      },
+      {
+        "id": "stage_02",
+        "objective": "接受高手的考驗",
+        "completion": {
+          "type": "kill",
+          "targetId": "enemy_masked_master",
+          "count": 1
+        }
+      }
+    ],
+    "rewards": [
+      { "type": "unlockMysticArt", "id": "art_lingyun" }
+    ],
+    "flagsOnComplete": ["encounter_steal_skill_done"],
+    "prerequisiteFlags": []
+  },
+  {
+    "id": "quest_encounter_02",
+    "type": "encounter",
+    "title": "隱士試煉",
+    "description": "地宮深處有一位隱世老者，通過他的試煉可獲得真傳。",
+    "stages": [
+      {
+        "id": "stage_01",
+        "objective": "找到隱士",
+        "completion": {
+          "type": "dialogue",
+          "targetId": "npc_hermit"
+        }
+      },
+      {
+        "id": "stage_02",
+        "objective": "完成試煉：不受傷擊敗精英怪",
+        "completion": {
+          "type": "kill",
+          "targetId": "enemy_cave_elite",
+          "count": 1
+        }
+      }
+    ],
+    "rewards": [
+      { "type": "item", "id": "item_inner_manual", "amount": 1 },
+      { "type": "currency", "id": "coin", "amount": 100 }
+    ],
+    "flagsOnComplete": ["encounter_hermit_done"],
+    "prerequisiteFlags": ["main_quest_complete"]
+  }
+]

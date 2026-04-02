@@ -1,0 +1,96 @@
+[
+  {
+    "id": "node_village_exit_bamboo",
+    "sceneId": "VillageScene",
+    "type": "entrance",
+    "x": 760,
+    "y": 300,
+    "linkedSceneId": "BambooFieldScene"
+  },
+  {
+    "id": "node_chest_bamboo_01",
+    "sceneId": "BambooFieldScene",
+    "type": "chest",
+    "x": 400,
+    "y": 150,
+    "requiresMysticArt": "art_lingyun",
+    "triggerFlag": "chest_bamboo_01_opened"
+  },
+  {
+    "id": "node_mechanism_bamboo",
+    "sceneId": "BambooFieldScene",
+    "type": "mechanism",
+    "x": 600,
+    "y": 200,
+    "requiresMysticArt": "art_qinxing",
+    "triggerFlag": "mechanism_bamboo_activated"
+  },
+  {
+    "id": "node_platform_bamboo",
+    "sceneId": "BambooFieldScene",
+    "type": "platform",
+    "x": 500,
+    "y": 100
+  },
+  {
+    "id": "node_strange_sound",
+    "sceneId": "BambooFieldScene",
+    "type": "secret",
+    "x": 650,
+    "y": 350,
+    "triggerFlag": "strange_sound_found"
+  },
+  {
+    "id": "node_master_training",
+    "sceneId": "BambooFieldScene",
+    "type": "encounter",
+    "x": 550,
+    "y": 280,
+    "triggerFlag": "master_training_found"
+  },
+  {
+    "id": "node_cave_entrance",
+    "sceneId": "BambooFieldScene",
+    "type": "entrance",
+    "x": 750,
+    "y": 400,
+    "requiresFlag": "bandit_elite_dead",
+    "linkedSceneId": "RuinCaveScene",
+    "triggerFlag": "cave_entered"
+  },
+  {
+    "id": "node_puzzle_01",
+    "sceneId": "RuinCaveScene",
+    "type": "mechanism",
+    "x": 200,
+    "y": 300,
+    "triggerFlag": "puzzle_01_solved"
+  },
+  {
+    "id": "node_puzzle_02",
+    "sceneId": "RuinCaveScene",
+    "type": "mechanism",
+    "x": 500,
+    "y": 200,
+    "requiresFlag": "puzzle_01_solved",
+    "requiresMysticArt": "art_qinxing",
+    "triggerFlag": "puzzle_02_solved"
+  },
+  {
+    "id": "node_ancient_relic",
+    "sceneId": "RuinCaveScene",
+    "type": "chest",
+    "x": 350,
+    "y": 350,
+    "requiresFlag": "puzzle_01_solved",
+    "triggerFlag": "ancient_relic_found"
+  },
+  {
+    "id": "node_cave_exit",
+    "sceneId": "RuinCaveScene",
+    "type": "entrance",
+    "x": 50,
+    "y": 300,
+    "linkedSceneId": "VillageScene"
+  }
+]

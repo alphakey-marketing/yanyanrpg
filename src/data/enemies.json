@@ -1,0 +1,93 @@
+[
+  {
+    "id": "enemy_bandit",
+    "name": "竹林山賊",
+    "type": "normal",
+    "hp": 60,
+    "attack": 8,
+    "defense": 3,
+    "speed": 80,
+    "aggroRange": 160,
+    "patrolRadius": 80,
+    "dropTableId": "drop_bandit",
+    "sceneId": "BambooFieldScene"
+  },
+  {
+    "id": "enemy_shadow",
+    "name": "夜行魅影",
+    "type": "normal",
+    "hp": 50,
+    "attack": 10,
+    "defense": 2,
+    "speed": 100,
+    "aggroRange": 120,
+    "patrolRadius": 60,
+    "dropTableId": "drop_shadow",
+    "sceneId": "BambooFieldScene"
+  },
+  {
+    "id": "enemy_cave_brute",
+    "name": "地宮蠻兵",
+    "type": "normal",
+    "hp": 80,
+    "attack": 12,
+    "defense": 5,
+    "speed": 60,
+    "aggroRange": 140,
+    "patrolRadius": 70,
+    "dropTableId": "drop_brute",
+    "sceneId": "RuinCaveScene"
+  },
+  {
+    "id": "enemy_bandit_elite",
+    "name": "山賊頭目",
+    "type": "elite",
+    "hp": 180,
+    "attack": 15,
+    "defense": 8,
+    "speed": 70,
+    "aggroRange": 200,
+    "patrolRadius": 40,
+    "dropTableId": "drop_elite",
+    "sceneId": "BambooFieldScene"
+  },
+  {
+    "id": "enemy_masked_master",
+    "name": "蒙面高手",
+    "type": "elite",
+    "hp": 200,
+    "attack": 18,
+    "defense": 6,
+    "speed": 110,
+    "aggroRange": 180,
+    "patrolRadius": 0,
+    "dropTableId": "drop_elite",
+    "sceneId": "BambooFieldScene"
+  },
+  {
+    "id": "enemy_cave_elite",
+    "name": "地宮精英衛",
+    "type": "elite",
+    "hp": 220,
+    "attack": 16,
+    "defense": 10,
+    "speed": 65,
+    "aggroRange": 160,
+    "patrolRadius": 50,
+    "dropTableId": "drop_elite",
+    "sceneId": "RuinCaveScene"
+  },
+  {
+    "id": "enemy_boss_guardian",
+    "name": "祠印守護者",
+    "type": "boss",
+    "hp": 500,
+    "attack": 22,
+    "defense": 12,
+    "speed": 75,
+    "aggroRange": 300,
+    "patrolRadius": 0,
+    "dropTableId": "drop_boss",
+    "sceneId": "RuinCaveScene"
+  }
+]

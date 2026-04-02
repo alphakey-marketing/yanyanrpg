@@ -1,0 +1,58 @@
+[
+  {
+    "id": "item_healing_potion",
+    "name": "回氣丹",
+    "type": "consumable",
+    "description": "恢復 30 點生命值。",
+    "quantity": 0
+  },
+  {
+    "id": "item_stamina_pill",
+    "name": "健步丸",
+    "type": "consumable",
+    "description": "恢復 40 點體力值。",
+    "quantity": 0
+  },
+  {
+    "id": "item_herb",
+    "name": "山草藥",
+    "type": "material",
+    "description": "可用於煉製藥丹的草藥。",
+    "quantity": 0
+  },
+  {
+    "id": "item_shrine_seal",
+    "name": "祠印",
+    "type": "key",
+    "description": "清河村祠堂的聖印，是村落的精神象徵。",
+    "quantity": 0
+  },
+  {
+    "id": "item_spirit_charm",
+    "name": "辟邪符",
+    "type": "consumable",
+    "description": "可短暫護體，防止幽靈類敵人的侵擾。",
+    "quantity": 0
+  },
+  {
+    "id": "item_ancient_relic",
+    "name": "地宮古物",
+    "type": "key",
+    "description": "地宮深處發現的神秘器物，似乎另有用途。",
+    "quantity": 0
+  },
+  {
+    "id": "item_inner_manual",
+    "name": "內功秘笈",
+    "type": "key",
+    "description": "記載著高深內功心法的古籍，閱後可提升內力上限。",
+    "quantity": 0
+  },
+  {
+    "id": "item_coin",
+    "name": "銅錢",
+    "type": "material",
+    "description": "通用貨幣。",
+    "quantity": 0
+  }
+]
