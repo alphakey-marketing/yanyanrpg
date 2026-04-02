@@ -60,7 +60,7 @@ export function DialogueSheet(): React.ReactElement | null {
         import('../../systems/quest/questSystem').then(({ startQuest, checkQuestCompletion }) => {
           startQuest(questId)
           // Advance any dialogue-type stage that matches this NPC
-          checkQuestCompletion('dialogue', npcId)
+          if (npcId) checkQuestCompletion('dialogue', npcId)
         })
       }
     }

@@ -9,10 +9,15 @@ import Interactable from '../entities/Interactable'
 import Enemy from '../entities/Enemy'
 import npcsData from '../data/npcs.json'
 import mapNodesData from '../data/mapNodes.json'
-import type { NPCData, MapNode } from '../types/game'
+import mysticArtsData from '../data/mysticArts.json'
+import type { NPCData, MapNode, MysticArtData } from '../types/game'
 import { updatePatrol } from '../systems/ai/patrolSystem'
 import { updateAggro } from '../systems/ai/aggroSystem'
 import { checkQuestCompletion } from '../systems/quest/questSystem'
+
+const MYSTIC_ART_NAMES: Record<string, string> = Object.fromEntries(
+  (mysticArtsData as MysticArtData[]).map(a => [a.id, a.name])
+)
 
 const NPC_DIALOGUES: Record<string, DialogueData> = {
   npc_village_chief: {
@@ -156,7 +161,7 @@ export default abstract class BaseScene extends Phaser.Scene {
         if (!store.player.learnedMysticArts.includes(node.unlocksArt)) {
           store.learnMysticArt(node.unlocksArt)
           emit(Events.MYSTIC_ART_UNLOCKED, node.unlocksArt)
-          emit(Events.SHOW_TOAST, `習得奇術：${node.unlocksArt === 'art_lingyun' ? '凌雲踏' : node.unlocksArt}`)
+          emit(Events.SHOW_TOAST, `習得奇術：${MYSTIC_ART_NAMES[node.unlocksArt] ?? node.unlocksArt}`)
         }
       }
     }
