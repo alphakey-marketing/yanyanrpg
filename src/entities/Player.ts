@@ -32,6 +32,10 @@ export default class Player {
   private lastDodge = 0
   private enemies: Enemy[] = []
   private scene: Phaser.Scene
+  // FIX Bug #5: store key references once; never call addKeys() per frame.
+  private keys: Record<string, Phaser.Input.Keyboard.Key> = {}
+  // FIX Q1: guard against entrance firing scene:navigate every frame.
+  private transitioning = false
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     this.scene = scene
@@ -49,7 +53,10 @@ export default class Player {
     this.joystick = new VirtualJoystick(scene)
     this.touchInput = new TouchInputSystem(scene, this.buildButtonConfigs())
 
-    scene.input.keyboard?.addKeys('W,A,S,D,Z,X,C,V,SPACE')
+    // FIX Bug #5: register keyboard keys once in the constructor.
+    if (scene.input.keyboard) {
+      this.keys = scene.input.keyboard.addKeys('W,A,S,D,Z,X,C,V,SPACE') as Record<string, Phaser.Input.Keyboard.Key>
+    }
   }
 
   private buildButtonConfigs() {
@@ -169,10 +176,9 @@ export default class Player {
   }
 
   private handleKeyboardInput(): void {
-    const kb = this.scene.input.keyboard
-    if (!kb) return
-
-    const keys = kb.addKeys('W,A,S,D,Z,X,C,V,SPACE') as Record<string, Phaser.Input.Keyboard.Key>
+    // FIX Bug #5: use this.keys set in constructor; never call addKeys() here.
+    const keys = this.keys
+    if (!keys || Object.keys(keys).length === 0) return
     if (isDodging()) return
 
     let vx = 0
@@ -182,9 +188,9 @@ export default class Player {
     if (keys['W']?.isDown) vy -= PLAYER_SPEED
     if (keys['S']?.isDown) vy += PLAYER_SPEED
 
-    if (vx !== 0 || vy !== 0) {
-      this.sprite.setVelocity(vx, vy)
-    }
+    // FIX Bug #2: always call setVelocity (even 0,0) so the sprite
+    // stops immediately when no key is held instead of sliding forever.
+    this.sprite.setVelocity(vx, vy)
 
     if (Phaser.Input.Keyboard.JustDown(keys['Z']!)) this.doLightAttack()
     if (Phaser.Input.Keyboard.JustDown(keys['X']!)) this.doHeavyAttack()
@@ -194,7 +200,12 @@ export default class Player {
   }
 
   checkInteractableInteraction(interactables: Interactable[]): void {
+    // FIX Q1: if a transition is already in flight, skip all further checks
+    // so entrance nodes do not spam scene:navigate every frame.
+    if (this.transitioning) return
+
     interactables.forEach(item => {
+      if (this.transitioning) return
       const dist = Phaser.Math.Distance.Between(
         this.sprite.x,
         this.sprite.y,
@@ -202,6 +213,9 @@ export default class Player {
         item.sprite.y
       )
       if (dist < 60 && item.canInteract()) {
+        if (item.node.type === 'entrance') {
+          this.transitioning = true
+        }
         item.interact(this.scene)
       }
     })
