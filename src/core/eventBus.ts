@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 
 type EventCallback = (...args: unknown[]) => void
 
-// Simple typed event bus for Phaser ↔ React communication
+// Simple typed event bus for Phaser <-> React communication
 class EventBus extends Phaser.Events.EventEmitter {
   private static _instance: EventBus
 
@@ -26,7 +26,13 @@ export const Events = {
   OPEN_DIALOGUE: 'ui:open_dialogue',
   CLOSE_DIALOGUE: 'ui:close_dialogue',
   QUEST_UPDATE: 'quest:update',
-  SCENE_CHANGED: 'scene:changed',
+  // FIX Bug #1: Split into two separate events.
+  // SCENE_READY    → emitted in BaseScene.create() to announce the active scene to the HUD.
+  // SCENE_NAVIGATE → emitted by Interactable to request navigation to another scene.
+  // SCENE_CHANGED  → kept as alias of SCENE_READY for any external consumers.
+  SCENE_READY: 'scene:ready',
+  SCENE_NAVIGATE: 'scene:navigate',
+  SCENE_CHANGED: 'scene:ready',
   SHOW_TOAST: 'ui:show_toast',
   ENEMY_KILLED: 'combat:enemy_killed',
   ITEM_COLLECTED: 'inventory:item_collected',
