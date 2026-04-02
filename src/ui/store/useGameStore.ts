@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { PlayerState, InventoryItem } from '../../types/game'
 import type { ActiveQuest } from '../../types/quest'
 import {
@@ -90,7 +91,9 @@ const initialPlayer: PlayerState = {
 
 let toastIdCounter = 0
 
-export const useGameStore = create<GameStore>(set => ({
+export const useGameStore = create<GameStore>()(
+  persist(
+    (set) => ({
   player: initialPlayer,
   currency: 0,
 
@@ -225,4 +228,14 @@ export const useGameStore = create<GameStore>(set => ({
   },
 
   removeToast: (id) => set(s => ({ toasts: s.toasts.filter(t => t.id !== id) })),
-}))
+}),
+{
+  name: 'yanyanrpg-save',
+  partialize: (state) => ({
+    player: state.player,
+    activeQuests: state.activeQuests,
+    currency: state.currency,
+  }),
+}
+)
+)

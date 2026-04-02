@@ -7,6 +7,7 @@ import { emit, Events } from '../../core/eventBus'
 import { STAMINA_COST_HEAVY } from '../../core/constants'
 import { consumeStamina } from './staminaSystem'
 import { checkQuestCompletion } from '../quest/questSystem'
+import { setFlag } from '../quest/flagSystem'
 import { isInvincible } from './dodgeSystem'
 
 const weapons: WeaponData[] = weaponsData as WeaponData[]
@@ -33,6 +34,7 @@ export function performLightAttack(
   const killed = target.takeDamage(damage)
 
   spawnDamageText(scene, target.sprite.x, target.sprite.y - 20, damage, false)
+  scene.cameras.main.shake(60, 0.002)
 
   if (killed) onEnemyKilled(target)
 }
@@ -53,6 +55,7 @@ export function performHeavyAttack(
   const killed = target.takeDamage(damage)
 
   spawnDamageText(scene, target.sprite.x, target.sprite.y - 20, damage, true)
+  scene.cameras.main.shake(100, 0.005)
 
   if (killed) onEnemyKilled(target)
 }
@@ -69,6 +72,9 @@ export function applyDamageToPlayer(damage: number): void {
 function onEnemyKilled(enemy: Enemy): void {
   emit(Events.ENEMY_KILLED, enemy.data.id)
   checkQuestCompletion('kill', enemy.data.id, 1)
+  if (enemy.data.killFlag) {
+    setFlag(enemy.data.killFlag)
+  }
   import('../loot/lootSystem').then(({ rollLoot }) => rollLoot(enemy.data.dropTableId))
 }
 

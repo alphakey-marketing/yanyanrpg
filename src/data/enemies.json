@@ -49,7 +49,8 @@
     "aggroRange": 200,
     "patrolRadius": 40,
     "dropTableId": "drop_elite",
-    "sceneId": "BambooFieldScene"
+    "sceneId": "BambooFieldScene",
+    "killFlag": "bandit_elite_dead"
   },
   {
     "id": "enemy_masked_master",

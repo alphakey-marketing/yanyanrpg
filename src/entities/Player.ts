@@ -16,7 +16,6 @@ import { useMysticArt } from '../systems/skills/mysticArtSystem'
 import { findNearestEnemy, updateLockIndicator } from '../systems/combat/lockOnSystem'
 import { updateStamina, updateInternalEnergy } from '../systems/combat/staminaSystem'
 import Enemy from './Enemy'
-import NPC from './NPC'
 import Interactable from './Interactable'
 import { useGameStore } from '../ui/store/useGameStore'
 
@@ -192,22 +191,6 @@ export default class Player {
     if (Phaser.Input.Keyboard.JustDown(keys['C']!)) this.doDodge()
     if (Phaser.Input.Keyboard.JustDown(keys['V']!)) this.doMysticArt()
     if (Phaser.Input.Keyboard.JustDown(keys['SPACE']!)) switchWeapon()
-  }
-
-  checkNPCInteraction(npcs: NPC[]): void {
-    npcs.forEach(npc => {
-      const dist = Phaser.Math.Distance.Between(
-        this.sprite.x,
-        this.sprite.y,
-        npc.sprite.x,
-        npc.sprite.y
-      )
-      if (dist < 50) {
-        npc.showInteractPrompt(this.scene)
-      } else {
-        npc.hideInteractPrompt()
-      }
-    })
   }
 
   checkInteractableInteraction(interactables: Interactable[]): void {

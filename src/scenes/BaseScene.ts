@@ -82,6 +82,8 @@ export default abstract class BaseScene extends Phaser.Scene {
   protected enemies: Enemy[] = []
   protected interactables: Interactable[] = []
   protected sceneId: string
+  private nearbyNPC: NPC | null = null
+  private fKey: Phaser.Input.Keyboard.Key | null = null
 
   constructor(key: string) {
     super({ key })
@@ -96,6 +98,7 @@ export default abstract class BaseScene extends Phaser.Scene {
     this.setupEnemies()
     this.setupCollisions()
     this.setupEventListeners()
+    this.fKey = this.input.keyboard?.addKey('F') ?? null
     this.scene.launch(SCENE_UI)
     emit(Events.SCENE_CHANGED, this.sceneId)
     useGameStore.getState().setScene(this.sceneId, this.player.sprite.x, this.player.sprite.y)
@@ -129,15 +132,7 @@ export default abstract class BaseScene extends Phaser.Scene {
   }
 
   protected setupCollisions(): void {
-    this.npcs.forEach(npc => {
-      this.physics.add.overlap(this.player.sprite, npc.sprite, () => {
-        const dialogue = NPC_DIALOGUES[npc.data.id]
-        if (dialogue) {
-          // Only open dialogue once per touch (not every frame)
-          // Dialogue is opened via UI button tap via showInteractPrompt
-        }
-      })
-    })
+    // Collisions reserved for future use (walls, platforms)
   }
 
   protected setupEventListeners(): void {
@@ -154,10 +149,32 @@ export default abstract class BaseScene extends Phaser.Scene {
     }
     on(Events.SCENE_CHANGED, handleSceneChange)
 
+    const handleNodeTriggered = (...args: unknown[]) => {
+      const node = args[0] as MapNode
+      if (node.unlocksArt) {
+        const store = useGameStore.getState()
+        if (!store.player.learnedMysticArts.includes(node.unlocksArt)) {
+          store.learnMysticArt(node.unlocksArt)
+          emit(Events.MYSTIC_ART_UNLOCKED, node.unlocksArt)
+          emit(Events.SHOW_TOAST, `習得奇術：${node.unlocksArt === 'art_lingyun' ? '凌雲踏' : node.unlocksArt}`)
+        }
+      }
+    }
+    on(Events.NODE_TRIGGERED, handleNodeTriggered)
+
     this.events.on('shutdown', () => {
       off(Events.SHOW_TOAST, handleToast)
       off(Events.SCENE_CHANGED, handleSceneChange)
+      off(Events.NODE_TRIGGERED, handleNodeTriggered)
     })
+  }
+
+  private openNPCDialogue(npc: NPC): void {
+    const dialogue = NPC_DIALOGUES[npc.data.id]
+    if (!dialogue || useGameStore.getState().isDialogueOpen) return
+    useGameStore.getState().openDialogue(dialogue)
+    // Advance any active quest that expects dialogue with this NPC
+    checkQuestCompletion('dialogue', npc.data.id)
   }
 
   update(_time: number, delta: number): void {
@@ -165,28 +182,47 @@ export default abstract class BaseScene extends Phaser.Scene {
 
     this.player.update(delta)
     this.player.setEnemies(this.enemies)
-    this.player.checkNPCInteraction(this.npcs)
 
-    // NPC interaction on tap: check proximity and open dialogue
+    // NPC proximity: show tappable interact prompt
+    this.nearbyNPC = null
+    let minDist = Infinity
     this.npcs.forEach(npc => {
       npc.update()
       const dist = Phaser.Math.Distance.Between(
         this.player.sprite.x, this.player.sprite.y,
         npc.sprite.x, npc.sprite.y
       )
-      // Auto-open dialogue when very close (for mobile)
-      if (dist < 35 && !useGameStore.getState().isDialogueOpen) {
+      if (dist < 60) {
         const dialogue = NPC_DIALOGUES[npc.data.id]
-        if (dialogue) {
-          useGameStore.getState().openDialogue(dialogue)
+        const onInteract = dialogue ? () => this.openNPCDialogue(npc) : undefined
+        npc.showInteractPrompt(this, onInteract)
+        if (dist < minDist) {
+          minDist = dist
+          this.nearbyNPC = npc
         }
+      } else {
+        npc.hideInteractPrompt()
       }
     })
 
+    // F key to interact with nearest NPC
+    if (
+      this.fKey &&
+      Phaser.Input.Keyboard.JustDown(this.fKey) &&
+      this.nearbyNPC &&
+      !useGameStore.getState().isDialogueOpen
+    ) {
+      this.openNPCDialogue(this.nearbyNPC)
+    }
+
     this.enemies.forEach(enemy => {
+      enemy.update()
       updatePatrol(enemy, delta)
       updateAggro(enemy, this.player.sprite, delta)
     })
+
+    // Critical: trigger scene transitions and interactable nodes
+    this.player.checkInteractableInteraction(this.interactables)
 
     this.enemies = this.enemies.filter(e => e.isAlive())
   }

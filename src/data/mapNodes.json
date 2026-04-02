@@ -46,7 +46,8 @@
     "type": "encounter",
     "x": 550,
     "y": 280,
-    "triggerFlag": "master_training_found"
+    "triggerFlag": "master_training_found",
+    "unlocksArt": "art_lingyun"
   },
   {
     "id": "node_cave_entrance",
@@ -91,6 +92,14 @@
     "type": "entrance",
     "x": 50,
     "y": 300,
+    "linkedSceneId": "VillageScene"
+  },
+  {
+    "id": "node_bamboo_exit_village",
+    "sceneId": "BambooFieldScene",
+    "type": "entrance",
+    "x": 30,
+    "y": 220,
     "linkedSceneId": "VillageScene"
   }
 ]

@@ -94,6 +94,7 @@ export type EnemyData = {
   patrolRadius: number
   dropTableId: string
   sceneId: string
+  killFlag?: string
 }
 
 export type MapNode = {
@@ -106,6 +107,7 @@ export type MapNode = {
   requiresMysticArt?: string
   triggerFlag?: string
   linkedSceneId?: string
+  unlocksArt?: string
 }
 
 export type DropEntry = {

@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import type { NPCData } from '../types/game'
-import { emit, Events } from '../core/eventBus'
 
 export default class NPC {
   sprite: Phaser.Physics.Arcade.Sprite
@@ -26,18 +25,26 @@ export default class NPC {
       .setDepth(11)
   }
 
-  showInteractPrompt(scene: Phaser.Scene): void {
+  showInteractPrompt(scene: Phaser.Scene, onInteract?: () => void): void {
     if (this.interactPrompt) return
     this.interactPrompt = scene.add
-      .text(this.sprite.x, this.sprite.y - 36, '[互動]', {
-        fontSize: '11px',
-        color: '#ffffff',
+      .text(this.sprite.x, this.sprite.y - 40, '[ 互動 ]', {
+        fontSize: '12px',
+        color: '#ffe066',
         fontFamily: 'serif',
         backgroundColor: '#00000099',
-        padding: { x: 4, y: 2 },
+        padding: { x: 6, y: 3 },
+        stroke: '#000',
+        strokeThickness: 2,
       })
       .setOrigin(0.5)
       .setDepth(20)
+
+    if (onInteract) {
+      this.interactPrompt
+        .setInteractive({ useHandCursor: true })
+        .on('pointerdown', onInteract)
+    }
   }
 
   hideInteractPrompt(): void {
@@ -45,13 +52,9 @@ export default class NPC {
     this.interactPrompt = null
   }
 
-  interact(): void {
-    emit(Events.OPEN_DIALOGUE, this.data)
-  }
-
   update(): void {
     this.label.setPosition(this.sprite.x, this.sprite.y - 20)
-    this.interactPrompt?.setPosition(this.sprite.x, this.sprite.y - 36)
+    this.interactPrompt?.setPosition(this.sprite.x, this.sprite.y - 40)
   }
 
   destroy(): void {

@@ -54,9 +54,14 @@ export function DialogueSheet(): React.ReactElement | null {
   const handleOption = (action: string) => {
     if (action.startsWith('accept_quest_') && dialogueData.questId) {
       const questId = dialogueData.questId
+      const npcId = dialogueData.npcId
       const alreadyActive = activeQuests.some(q => q.questId === questId)
       if (!alreadyActive) {
-        import('../../systems/quest/questSystem').then(({ startQuest }) => startQuest(questId))
+        import('../../systems/quest/questSystem').then(({ startQuest, checkQuestCompletion }) => {
+          startQuest(questId)
+          // Advance any dialogue-type stage that matches this NPC
+          checkQuestCompletion('dialogue', npcId)
+        })
       }
     }
     closeDialogue()
