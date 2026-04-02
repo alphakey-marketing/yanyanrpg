@@ -52,11 +52,13 @@ export default class UIScene extends Phaser.Scene {
       this.updateQuestTracker()
     }
 
-    on(Events.SCENE_CHANGED, handleSceneChange)
+    // FIX: use SCENE_READY (scene announcement for HUD) not SCENE_CHANGED.
+    // SCENE_NAVIGATE is for BaseScene navigation only and must not be used here.
+    on(Events.SCENE_READY, handleSceneChange)
     on(Events.QUEST_UPDATE, handleQuestUpdate)
 
     this.events.on('shutdown', () => {
-      off(Events.SCENE_CHANGED, handleSceneChange)
+      off(Events.SCENE_READY, handleSceneChange)
       off(Events.QUEST_UPDATE, handleQuestUpdate)
     })
   }
