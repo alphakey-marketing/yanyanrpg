@@ -1,0 +1,63 @@
+[
+  {
+    "id": "npc_village_chief",
+    "name": "村長",
+    "role": "questGiver",
+    "sceneId": "VillageScene",
+    "x": 200,
+    "y": 200,
+    "dialogueIds": ["dlg_chief_01", "dlg_chief_02"],
+    "questIds": ["quest_main_01"]
+  },
+  {
+    "id": "npc_storyteller",
+    "name": "說書人",
+    "role": "hint",
+    "sceneId": "VillageScene",
+    "x": 350,
+    "y": 220,
+    "dialogueIds": ["dlg_story_01"],
+    "questIds": ["quest_side_02"]
+  },
+  {
+    "id": "npc_healer",
+    "name": "郎中",
+    "role": "shop",
+    "sceneId": "VillageScene",
+    "x": 150,
+    "y": 280,
+    "dialogueIds": ["dlg_healer_01"],
+    "questIds": ["quest_side_01"],
+    "shopItems": ["item_healing_potion", "item_stamina_pill"]
+  },
+  {
+    "id": "npc_trainer",
+    "name": "練武師傅",
+    "role": "teacher",
+    "sceneId": "VillageScene",
+    "x": 300,
+    "y": 300,
+    "dialogueIds": ["dlg_trainer_01"],
+    "questIds": []
+  },
+  {
+    "id": "npc_villager",
+    "name": "村民",
+    "role": "questGiver",
+    "sceneId": "VillageScene",
+    "x": 420,
+    "y": 180,
+    "dialogueIds": ["dlg_villager_01"],
+    "questIds": ["quest_side_03"]
+  },
+  {
+    "id": "npc_hermit",
+    "name": "隱士",
+    "role": "encounter",
+    "sceneId": "RuinCaveScene",
+    "x": 300,
+    "y": 400,
+    "dialogueIds": ["dlg_hermit_01"],
+    "questIds": ["quest_encounter_02"]
+  }
+]

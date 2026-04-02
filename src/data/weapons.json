@@ -1,0 +1,38 @@
+[
+  {
+    "id": "sword_qingfeng",
+    "name": "青鋒單劍",
+    "type": "sword",
+    "role": "balanced",
+    "stats": {
+      "attack": 12,
+      "breakPower": 8,
+      "speed": 10
+    },
+    "moveset": {
+      "lightAttack": "三連斬",
+      "heavyAttack": "突刺",
+      "special": "旋風斬",
+      "switchSkill": "換手斬"
+    },
+    "mobileLayoutHint": "tap-combo"
+  },
+  {
+    "id": "fan_youfeng",
+    "name": "游風折扇",
+    "type": "fan",
+    "role": "control",
+    "stats": {
+      "attack": 8,
+      "breakPower": 14,
+      "speed": 14
+    },
+    "moveset": {
+      "lightAttack": "扇擊連點",
+      "heavyAttack": "扇風颶",
+      "special": "封穴扇",
+      "switchSkill": "翻身扇"
+    },
+    "mobileLayoutHint": "tap-combo"
+  }
+]

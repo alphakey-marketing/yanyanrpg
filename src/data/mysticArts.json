@@ -1,0 +1,28 @@
+[
+  {
+    "id": "art_qinxing",
+    "name": "擒星拿月",
+    "category": "hybrid",
+    "cost": 30,
+    "cooldown": 4000,
+    "uses": ["exploration", "combat"],
+    "effects": ["隔空取物", "奪械 — 解除敵人武裝", "遠距拉近目標"],
+    "unlockCondition": {
+      "type": "questComplete",
+      "targetId": "quest_main_01"
+    }
+  },
+  {
+    "id": "art_lingyun",
+    "name": "凌雲踏",
+    "category": "hybrid",
+    "cost": 20,
+    "cooldown": 3000,
+    "uses": ["exploration", "combat"],
+    "effects": ["短距位移", "跳躍至高台", "戰鬥中瞬移閃避"],
+    "unlockCondition": {
+      "type": "npcTeach",
+      "targetId": "npc_trainer"
+    }
+  }
+]
