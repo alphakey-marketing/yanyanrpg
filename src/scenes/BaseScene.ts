@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { SCENE_UI } from '../core/constants'
+import { SCENE_UI, GAME_WIDTH, GAME_HEIGHT } from '../core/constants'
 import { emit, on, off, Events } from '../core/eventBus'
 import type { DialogueData } from '../ui/store/useGameStore'
 import { useGameStore } from '../ui/store/useGameStore'
@@ -23,7 +23,7 @@ const NPC_DIALOGUES: Record<string, DialogueData> = {
   npc_village_chief: {
     npcId: 'npc_village_chief',
     name: '村長',
-    lines: ['山賊近日在竹林出沒，祠印恐怕已被奪走。', '請你去竹林道查看，若能尋回祠印，村中上下感激不盡。'],
+    lines: ['山賊近日在竹林出沒，祠印恐怕已被奔走。', '請你去竹林道查看，若能岋回祠印，村中上下感激不盡。'],
     options: [
       { label: '我去看看', action: 'accept_quest_main' },
       { label: '先去酒館打聽', action: 'close' },
@@ -43,16 +43,16 @@ const NPC_DIALOGUES: Record<string, DialogueData> = {
   npc_healer: {
     npcId: 'npc_healer',
     name: '郎中',
-    lines: ['竹林中有山草藥，若你能幫我採幾株，我用藥丹答謝。'],
+    lines: ['竹林中有山草藥，若你能幫我揁幾株，我用藥丹答説。'],
     options: [
-      { label: '我去採', action: 'accept_quest_side_01' },
+      { label: '我去揁', action: 'accept_quest_side_01' },
       { label: '改天再說', action: 'close' },
     ],
     questId: 'quest_side_01',
   },
   npc_trainer: {
     npcId: 'npc_trainer',
-    name: '練武師傅',
+    name: '練武師僅',
     lines: [
       '武者需懂雙武器之道。按「換武」鍵可切換主副武器。',
       '奇術是武者的秘藏，習得後按「奇術」鍵施放。記得裝備奇術才能使用。',
@@ -72,9 +72,9 @@ const NPC_DIALOGUES: Record<string, DialogueData> = {
   npc_hermit: {
     npcId: 'npc_hermit',
     name: '隱士',
-    lines: ['你能到達此地，說明你有幾分本事。', '老夫有一試煉，通過者可得真傳。'],
+    lines: ['你能到達此地，說明你有幾分本事。', '老夫有一試練，通過者可得真傳。'],
     options: [
-      { label: '接受試煉', action: 'accept_quest_encounter_02' },
+      { label: '接受試練', action: 'accept_quest_encounter_02' },
       { label: '先不了', action: 'close' },
     ],
     questId: 'quest_encounter_02',
@@ -96,6 +96,10 @@ export default abstract class BaseScene extends Phaser.Scene {
   }
 
   create(): void {
+    // FIX Bug #6: set explicit world bounds so the player cannot drift outside
+    // the play area and miss entrance hitboxes at the scene edges.
+    this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT)
+
     this.setupWorld()
     this.setupPlayer()
     this.setupNPCs()
@@ -105,7 +109,9 @@ export default abstract class BaseScene extends Phaser.Scene {
     this.setupEventListeners()
     this.fKey = this.input.keyboard?.addKey('F') ?? null
     this.scene.launch(SCENE_UI)
-    emit(Events.SCENE_CHANGED, this.sceneId)
+    // FIX Bug #1: emit SCENE_READY (announces the current scene to the HUD)
+    // NOT SCENE_NAVIGATE (which would trigger a scene transition loop).
+    emit(Events.SCENE_READY, this.sceneId)
     useGameStore.getState().setScene(this.sceneId, this.player.sprite.x, this.player.sprite.y)
     checkQuestCompletion('enterScene', this.sceneId)
   }
@@ -146,13 +152,15 @@ export default abstract class BaseScene extends Phaser.Scene {
     }
     on(Events.SHOW_TOAST, handleToast)
 
-    const handleSceneChange = (...args: unknown[]) => {
+    // FIX Bug #1: listen on SCENE_NAVIGATE only (navigation requests from entrances).
+    // Scenes must NOT react to SCENE_READY — that is only for HUD consumers.
+    const handleSceneNavigate = (...args: unknown[]) => {
       const sceneId = args[0] as string
       if (sceneId !== this.sceneId) {
         this.scene.start(sceneId)
       }
     }
-    on(Events.SCENE_CHANGED, handleSceneChange)
+    on(Events.SCENE_NAVIGATE, handleSceneNavigate)
 
     const handleNodeTriggered = (...args: unknown[]) => {
       const node = args[0] as MapNode
@@ -169,7 +177,7 @@ export default abstract class BaseScene extends Phaser.Scene {
 
     this.events.on('shutdown', () => {
       off(Events.SHOW_TOAST, handleToast)
-      off(Events.SCENE_CHANGED, handleSceneChange)
+      off(Events.SCENE_NAVIGATE, handleSceneNavigate)
       off(Events.NODE_TRIGGERED, handleNodeTriggered)
     })
   }
@@ -178,7 +186,6 @@ export default abstract class BaseScene extends Phaser.Scene {
     const dialogue = NPC_DIALOGUES[npc.data.id]
     if (!dialogue || useGameStore.getState().isDialogueOpen) return
     useGameStore.getState().openDialogue(dialogue)
-    // Advance any active quest that expects dialogue with this NPC
     checkQuestCompletion('dialogue', npc.data.id)
   }
 
@@ -226,7 +233,7 @@ export default abstract class BaseScene extends Phaser.Scene {
       updateAggro(enemy, this.player.sprite, delta)
     })
 
-    // Critical: trigger scene transitions and interactable nodes
+    // Trigger scene transitions and interactable nodes
     this.player.checkInteractableInteraction(this.interactables)
 
     this.enemies = this.enemies.filter(e => e.isAlive())
