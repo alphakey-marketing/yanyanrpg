@@ -25,14 +25,12 @@ export function updateAggro(
   }
 
   if (enemy.aiState === 'aggro') {
-    // Move toward player
     const angle = Math.atan2(player.y - enemy.sprite.y, player.x - enemy.sprite.x)
     enemy.sprite.setVelocity(
       Math.cos(angle) * data.speed,
       Math.sin(angle) * data.speed
     )
 
-    // Attack if close
     if (dist < 40) {
       enemy.attackTimer = (enemy.attackTimer ?? 0) + delta
       const atkInterval = data.type === 'boss' ? 1000 : 1500
@@ -40,8 +38,10 @@ export function updateAggro(
         enemy.attackTimer = 0
         applyDamageToPlayer(data.attack)
         enemy.sprite.setTint(0xff4444)
-        // Clear tint after brief flash
-        setTimeout(() => enemy.sprite?.clearTint(), 150)
+        // Use Phaser's delayedCall so it's cleaned up when the scene shuts down
+        enemy.sprite.scene.time.delayedCall(150, () => {
+          if (enemy.sprite?.active) enemy.sprite.clearTint()
+        })
       }
     }
   }

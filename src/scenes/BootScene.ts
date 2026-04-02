@@ -7,12 +7,18 @@ export default class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
-    // Force landscape on mobile
+    // Attempt to lock landscape orientation on mobile; silently ignore failures
     if (this.sys.game.device.os.android || this.sys.game.device.os.iOS) {
-      const screen = window.screen as Screen & {
-        orientation?: { lock: (o: string) => void }
+      try {
+        const screen = window.screen as Screen & {
+          orientation?: { lock: (o: string) => Promise<void> }
+        }
+        screen.orientation?.lock('landscape')?.catch(() => {
+          // Orientation lock may be denied; continue without it
+        })
+      } catch {
+        // Browser does not support orientation lock; continue
       }
-      screen.orientation?.lock('landscape')
     }
   }
 
